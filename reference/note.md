@@ -59,3 +59,35 @@ Cache hit ratio提高0.64%（有限），但对比暴力法消耗时间大大减
 
 
 
+# On Designing a Cost-Aware Virtual CDN for the Federated Cloud
+
+## 1. Intro
+
+Main challenge: while establishing such a CDN is implementing a cost efficient and dynamic mechanism which guarantees good service quality to users.
+
+设计了一个model帮助MPs建立self-managed virtual CDN by leveraging a OpenStack- based federated cloud.
+
+Perfomance assessed over the federated XIFI cloud.
+
+## 2. Framework for virtual CDN
+
+用户按地区分组 - based on Classless Inter-Domain Routing (CIDR) address blocks.
+
+We used a non-cooperative pull- based mechanism for building a centralized virtual CDN
+
+We developed an algorithm that manages caching proxies based on the demand from user clusters.
+
+## 3. The Cost Function
+
+使用virtual proxy的费用包含open cost, cost of streaming a video from virtual proxy to uses, cost of transferring a video from origin server to a virtual proxy三部分。
+
+## 4. Heuristic algorithm for virtual CDN
+
+The goal of this algorithm is to spawn or turn off caching proxies in response to varying user demand in a cluster. 
+
+## 5. Testbed
+
+4个指标
+
+## 6. Results
+
