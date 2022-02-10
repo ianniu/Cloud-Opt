@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+# Papers
+=======
 # 论文
+>>>>>>> 6a16497e5365f0ae4505bdf089116cd8331798a2
 
 # Content Delivery Networks - Q-Learning
 
@@ -20,6 +24,7 @@ ML-based models can be estimated to predict the evolution of the relative popula
 
 ## Problem
 
+<<<<<<< HEAD
 理想化时，所有资源都应存储在 CDN server 中。但是 operating, storage costs 和用户需求随地点和时间在变。所以要找到一个自适应大小的服务来减小 cost，同时维持 CDN 表现。
 
 主要目标：减小 OPEX costs of CDN by increasing the TTL of content stored on the server. 为了增加 TTL，要提高 Cache Hit Ratio.
@@ -35,6 +40,23 @@ Cache node 存 content、记录 requests 数量。它会给 content 设置 TTL�
 ## Algorithms
 
 暴力法算最佳太慢了，不满足现实网络要求。为了克服过长的模拟过程，实现了 Q-Learning.
+=======
+理想化时，所有资源都应存储在CDN server中。但是operating, storage costs和用户需求随地点和时间在变。所以要找到一个自适应大小的服务来减小cost，同时维持CDN表现。
+
+主要目标：减小OPEX costs of CDN by increasing the TTL of content stored on the server.  为了增加TTL，要提高Cache Hit Ratio.
+
+## CDN Model
+
+Model可以记录CDN cost ($ for 100,00 requests)和Cache Hit Rate.
+
+Content指标：size, popularity level.
+
+Cache node存content、记录requests数量。它会给content设置TTL，基于popularity. 过期后会向main server重新请求。
+
+## Algorithms
+
+暴力法算最佳太慢了，不满足现实网络要求。为了克服过长的模拟过程，实现了Q-Learning.
+>>>>>>> 6a16497e5365f0ae4505bdf089116cd8331798a2
 
 Q-learning 步骤：
 
@@ -49,6 +71,7 @@ When the simulation starts, we assign a random TTL starting value and calculate 
 
 ## 仿真设置
 
+<<<<<<< HEAD
 ## Results
 
 Cache hit ratio 提高 0.64%（有限），但对比暴力法消耗时间大大减少（52,723s → 517s）。
@@ -56,15 +79,27 @@ Cache hit ratio 提高 0.64%（有限），但对比暴力法消耗时间大大�
 ## 问题
 
 - BF 和 Q 的关系
-  - BF 的结论是完全正确的么？BF 作为标准对照组？还是作为优化的起始点？
+  - BF 的结论是完全正确的么？BF 作为标准对照组？还是作为优化的起始点？BF准确率求证，目的是时间的优化。
 - Algorithm
-  - 各项数值怎么计算，CHR，TTL，cost
+  - 各项数值怎么计算，CHR，TTL，cost - simulator
   - 为什么会有 cache misses，怎么选择缓存的部分
   - cost 和存多少数据有关么
-  - TTL 和请求数量有关么
+  - TTL 和请求数量有关么 - 初始值设定，步进？
+  - if reward > 0 then "randomly" - why?
 - 怎样实现
   - Q:ML
   - BF
+=======
+
+
+## Results
+
+Cache hit ratio提高0.64%（有限），但对比暴力法消耗时间大大减少（52,723s → 517s）。
+
+
+
+
+>>>>>>> 6a16497e5365f0ae4505bdf089116cd8331798a2
 
 # On Designing a Cost-Aware Virtual CDN for the Federated Cloud
 
@@ -72,7 +107,11 @@ Cache hit ratio 提高 0.64%（有限），但对比暴力法消耗时间大大�
 
 Main challenge: while establishing such a CDN is implementing a cost efficient and dynamic mechanism which guarantees good service quality to users.
 
+<<<<<<< HEAD
 设计了一个 model 帮助 MPs 建立 self-managed virtual CDN by leveraging a OpenStack- based federated cloud.
+=======
+设计了一个model帮助MPs建立self-managed virtual CDN by leveraging a OpenStack- based federated cloud.
+>>>>>>> 6a16497e5365f0ae4505bdf089116cd8331798a2
 
 Perfomance assessed over the federated XIFI cloud.
 
@@ -86,6 +125,7 @@ We developed an algorithm that manages caching proxies based on the demand from 
 
 ## 3. The Cost Function
 
+<<<<<<< HEAD
 使用 virtual proxy 的费用包含 open cost, cost of streaming a video from virtual proxy to uses, cost of transferring a video from origin server to a virtual proxy 三部分。
 
 ## 4. Heuristic algorithm for virtual CDN
@@ -97,3 +137,17 @@ The goal of this algorithm is to spawn or turn off caching proxies in response t
 4 个指标
 
 ## 6. Results
+=======
+使用virtual proxy的费用包含open cost, cost of streaming a video from virtual proxy to uses, cost of transferring a video from origin server to a virtual proxy三部分。
+
+## 4. Heuristic algorithm for virtual CDN
+
+The goal of this algorithm is to spawn or turn off caching proxies in response to varying user demand in a cluster. 
+
+## 5. Testbed
+
+4个指标
+
+## 6. Results
+
+>>>>>>> 6a16497e5365f0ae4505bdf089116cd8331798a2
