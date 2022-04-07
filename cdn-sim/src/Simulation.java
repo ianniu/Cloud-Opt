@@ -38,6 +38,7 @@ public class Simulation {
     private ArrayList<CacheNode> cacheNodes = new ArrayList<>();
     private ArrayList<Content> contents = new ArrayList<>();
     private ArrayList<ContentPart> contentParts = new ArrayList<>();
+    // <"day-hour", request>
     private HashMap<String, ArrayList<ClientContentPartRequest>> clientContentPartRequests = new HashMap<>();
 
     private static int totalNumberOfRequests = 0;
@@ -130,6 +131,12 @@ public class Simulation {
             node.decreaseCachedContentPartsTtl();
     }
 
+    /**
+     * Gather every hour's request in a year into hours in a week.
+     * Like gather all requests in Mondays in one Monday.
+     * 将DAYS_TO_RUN里每一天中每一小时的request加起来，放入七天内的每一小时。
+     * "50周中的所有周一加和到一个周一中"
+     */
     private void printWeekRequestDistribution() {
         long[][] requestCount = new long[NUMBER_OF_DAYS_IN_WEEK][HOURS_IN_DAY];
 
@@ -148,6 +155,14 @@ public class Simulation {
                 System.out.println((this.clientContentPartRequests.get(day + "-" + hour) != null ? this.clientContentPartRequests.get(day + "-" + hour).size() : 0 ));
     }
 
+    /**
+     * Every client has a possibility to request every content.
+     * The possibility is based on the content's popularity: (by default)
+     * VERY_POPULAR - 80%
+     * POPULAR - 50%
+     * REGULAR - 20%
+     * OBSOLETE - 5%
+     */
     private void createClientContentPartRequests() {
         for (Client client : clients)
             for (Content content : contents)
@@ -155,23 +170,35 @@ public class Simulation {
                     createClientContentPartRequest(client, content);
     }
 
+    /**
+     * Client requests 0 to n(random number) content parts of the content.
+     * Adding this client request to the clientContentPartRequests map with key day-hour
+     * @param client client who starts request
+     * @param content content to be requested
+     */
     private void createClientContentPartRequest(Client client, Content content) {
         int lastSequenceNumberToRequest = getRandomIntegerInRange(0, content.getParts().size() - 1);
 
         int weekDay = getRequestWeekDay();
         int randomWeekNumber = getRandomIntegerInRange(0, NUMBER_OF_WEEKS_TO_SIMULATE - 1);
+        // get the day index in a year
         int day = randomWeekNumber * NUMBER_OF_DAYS_IN_WEEK + weekDay;
         int hour = getRequestHour();
 
+        // request content parts from 0 to lastSequenceNumberToRequest
         for (int i = 0; i < lastSequenceNumberToRequest; i++) {
             String key = day + "-" + hour;
             ClientContentPartRequest clientContentPartRequest = new ClientContentPartRequest(content.getParts().get(i), client, day, hour);
+            // adding request to the map, with day-hour as key
             if (!clientContentPartRequests.containsKey(key))
                 clientContentPartRequests.put(key, new ArrayList<>());
             clientContentPartRequests.get(key).add(clientContentPartRequest);
         }
     }
 
+    /**
+     * @return 0~6 with possibility based on weeklyChanceToRequestContent.
+     */
     private int getRequestWeekDay() {
         int chance = new Random().nextInt(100);
 
@@ -191,6 +218,9 @@ public class Simulation {
             return 6;
     }
 
+    /**
+     * @return 0~23 with possibility based on hourlyChanceToRequestContent
+     */
     private int getRequestHour() {
         int chance = new Random().nextInt(100);
 
@@ -244,6 +274,11 @@ public class Simulation {
             return 23;
     }
 
+    /**
+     * Generate a random number from 0 to 100, check if the number is less than the content's REQUEST_PERCENTAGE
+     * @param content content may be requested
+     * @return if the content should be requested
+     */
     private boolean contentShouldBeRequested(Content content) {
         int randomChance = new Random().nextInt(100);
 
@@ -262,11 +297,20 @@ public class Simulation {
         return false;
     }
 
+    /**
+     * Create NUMBER_OF_CONTENTS(default as 100) contents.
+     * @throws Exception
+     */
     private void createContents() throws Exception {
         for (int i = 0 ; i < NUMBER_OF_CONTENTS ; i++)
             createContent(i);
     }
 
+    /**
+     * Create content with random popularity level and add it to contents list.
+     * @param i Content index
+     * @throws Exception
+     */
     private void createContent(int i) throws Exception {
         Content content = new Content("Content " + i, getRandomPopularityLevel());
 
@@ -275,18 +319,36 @@ public class Simulation {
         contents.add(content);
     }
 
+    /**
+     * Create content parts based on a content, the number of content parts is random from MIN to MAX.
+     * @param content
+     */
     private void createContentParts(Content content) {
         int numberOfParts = getRandomIntegerInRange(MIN_NUMBER_OF_CONTENT_PARTS_TO_REQUEST, MAX_NUMBER_OF_CONTENT_PARTS_TO_REQUEST);
         for (int j = 0 ; j < numberOfParts ; j++)
             createContentPart(content, j);
     }
 
+    /**
+     * Create a content part and add it to the content it belongs.
+     * @param content
+     * @param j sequence number
+     */
     private void createContentPart(Content content, int j) {
         ContentPart contentPart = new ContentPart(content, j);
         contentParts.add(contentPart);
         content.getParts().add(contentPart);
     }
 
+    /**
+     * Possibility of getting each popularity level:
+     * 10% - OBSOLETE
+     * 75% - REGULAR
+     * 10% - POPUlAR
+     * 5% - VERY_POPULAR
+     * @return PopularityLevel generate randomly
+     * @throws Exception
+     */
     private PopularityLevel getRandomPopularityLevel() throws Exception {
         int randomPopularityLevel = new Random().nextInt(100);
 
@@ -307,6 +369,10 @@ public class Simulation {
             createCacheNode(region);
     }
 
+    /**
+     * Create a cacheNode in a certain region
+     * @param region Region where create cacheNode
+     */
     private void createCacheNode(Region region) {
         CacheNode cacheNode = new CacheNode(region, cacheTtlNumberOfCycles);
         cacheNodes.add(cacheNode);
@@ -318,6 +384,10 @@ public class Simulation {
             createClient();
     }
 
+    /**
+     * Randomly generate client in every region.
+     * Then add the client to region's clients list and clients.
+     */
     private void createClient() {
         Region region = regions.get(new Random().nextInt(regions.size()));
         Client client = new Client(region, region.getName() + " " + region.getClients().size());
