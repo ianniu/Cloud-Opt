@@ -26,6 +26,7 @@ public class CacheNode {
     private static final double STORAGE_PRICE_PER_GB_PER_HOUR = (0.022 / 30) / 24;
     private static final double STORAGE_PRICE_PER_1000_REQUEST = 0.005;
 
+    // need to add feature: different price for different region
     public CacheNode(Region region, int defaultTtl) {
         this.region = region;
         this.detaultTtl = defaultTtl;
@@ -134,7 +135,7 @@ public class CacheNode {
         this.ttlTable = ttlTable;
     }
 
-    public void cacheContentPart (ContentPart contentPart) {
+    public void cacheContentPart(ContentPart contentPart) {
         this.contentParts.add(contentPart);
 
         this.requestsToServerCount++;
@@ -142,26 +143,33 @@ public class CacheNode {
         renewTtl(contentPart);
     }
 
-    public void renewTtl (ContentPart contentPart) {
-        if (ttlTable[detaultTtl-1] == null)
-            ttlTable[detaultTtl-1] = new ArrayList<>();
+    public void renewTtl(ContentPart contentPart) {
+        if (ttlTable[detaultTtl - 1] == null)
+            ttlTable[detaultTtl - 1] = new ArrayList<>();
 
-        ttlTable[detaultTtl-1].add(contentPart);
+        ttlTable[detaultTtl - 1].add(contentPart);
     }
 
+    /**
+     * Remove content parts stored in ttlTable[0], which means they have ttl as 0.
+     * Then reduce every content part's ttl with 1.
+     */
     public void decreaseCachedContentPartsTtl() {
         if (ttlTable[0] != null)
             for (ContentPart contentPart : ttlTable[0])
                 contentParts.remove(contentPart);
 
-        for (int i = 0; i < detaultTtl-1; i++)
-            ttlTable[i] = ttlTable[i+1];
+        for (int i = 0; i < detaultTtl - 1; i++)
+            ttlTable[i] = ttlTable[i + 1];
 
-        ttlTable[detaultTtl-1] = new ArrayList<>();
+        ttlTable[detaultTtl - 1] = new ArrayList<>();
 
         updateStorageHostingCost();
     }
 
+    /**
+     *
+     */
     private void updateStorageHostingCost() {
         for (ArrayList<ContentPart> cachedParts : ttlTable)
             storageHostingCost += cachedParts.size() * ContentPart.DEFAULT_CONTENT_PART_SIZE_IN_GB * STORAGE_PRICE_PER_GB_PER_HOUR;

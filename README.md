@@ -66,6 +66,28 @@ What we do to achieve.
 
 
 
+## Results
+
+### Brute Force
+
+![BF-TTLCost](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/BF-TTLCost.png)
+
+![BF-TTLCHR](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/BF-TTLCHR.png)
+
+### Q-Learning
+
+
+
+![Q-TTLCost](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/Q-TTLCost.png)
+
+![Q-TTLCHR](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/Q-TTLCHR.png)
+
+### Gradient Descent
+
+![GD-TTLCost](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/GD-TTLCost.png)
+
+![GD-TTLCHR](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/GD-TTLCHR.png)
+
 ## Open issue
 
 There are some aspects in our project that can be discussed further.

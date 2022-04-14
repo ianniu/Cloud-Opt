@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
-
 public class Simulation {
     private static final int NUMBER_OF_CLIENTS = 3000;
     private static final int NUMBER_OF_CONTENTS = 100;
@@ -24,8 +23,8 @@ public class Simulation {
     private static final PopularityLevel regularPopularityLevel = new PopularityLevel("Regular");
     private static final PopularityLevel obsoletePopularityLevel = new PopularityLevel("Obsolete");
 
-    private static final int[] hourlyChanceToRequestContent = {4,4,3,3,3,4,4,4,4,4,4,4,5,5,4,4,4,4,4,5,6,5,4,4};
-    private static final int[] weeklyChanceToRequestContent = {12,11,12,13,17,19,16};
+    private static final int[] hourlyChanceToRequestContent = {4, 4, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 4, 4, 4, 5, 6, 5, 4, 4};
+    private static final int[] weeklyChanceToRequestContent = {12, 11, 12, 13, 17, 19, 16};
 
     private static final int NUMBER_OF_WEEKS_TO_SIMULATE = 50;
     private static final int NUMBER_OF_DAYS_IN_WEEK = 7;
@@ -38,7 +37,7 @@ public class Simulation {
     private ArrayList<CacheNode> cacheNodes = new ArrayList<>();
     private ArrayList<Content> contents = new ArrayList<>();
     private ArrayList<ContentPart> contentParts = new ArrayList<>();
-    // <"day-hour", request>
+    // <"day-hour", request list>
     private HashMap<String, ArrayList<ClientContentPartRequest>> clientContentPartRequests = new HashMap<>();
 
     private static int totalNumberOfRequests = 0;
@@ -83,7 +82,7 @@ public class Simulation {
         return ((float) totalNumberOfRequestsThatHitCache / (float) totalNumberOfRequests) * 100;
     }
 
-    private double getCost() {
+    public double getCost() {
         double cost = 0;
 
         for (CacheNode cacheNode : cacheNodes)
@@ -92,12 +91,22 @@ public class Simulation {
         return cost;
     }
 
+    /**
+     * Run simulation for every hour in a year.
+     */
     private void runSimulationSteps() {
-        for (int day = 0 ; day < DAYS_TO_RUN ; day++)
-            for (int hour = 0 ; hour < HOURS_IN_DAY ; hour++)
+        for (int day = 0; day < DAYS_TO_RUN; day++)
+            for (int hour = 0; hour < HOURS_IN_DAY; hour++)
                 runSimulationStep(day, hour);
     }
 
+    /**
+     * Decrease cached content parts' ttl (in hours).
+     * Then execute requests.
+     *
+     * @param day
+     * @param hour
+     */
     private void runSimulationStep(int day, int hour) {
         decreaseCachedContentPartsTtl();
 
@@ -121,8 +130,7 @@ public class Simulation {
         if (cacheNode.getContentParts().contains(contentPart)) {
             totalNumberOfRequestsThatHitCache++;
             cacheNode.renewTtl(contentPart);
-        }
-        else
+        } else
             cacheNode.cacheContentPart(contentPart);
     }
 
@@ -140,8 +148,8 @@ public class Simulation {
     private void printWeekRequestDistribution() {
         long[][] requestCount = new long[NUMBER_OF_DAYS_IN_WEEK][HOURS_IN_DAY];
 
-        for (int day = 0; day < DAYS_TO_RUN ; day++)
-            for (int hour = 0 ; hour < HOURS_IN_DAY ; hour++)
+        for (int day = 0; day < DAYS_TO_RUN; day++)
+            for (int hour = 0; hour < HOURS_IN_DAY; hour++)
                 requestCount[day % NUMBER_OF_DAYS_IN_WEEK][hour] += (clientContentPartRequests.get(day + "-" + hour) != null ? clientContentPartRequests.get(day + "-" + hour).size() : 0);
 
         for (int i = 0; i < NUMBER_OF_DAYS_IN_WEEK; i++)
@@ -150,9 +158,9 @@ public class Simulation {
     }
 
     private void printRequestCountPerHour() {
-        for (int day = 0 ; day < DAYS_TO_RUN ; day++)
-            for (int hour = 0 ; hour < HOURS_IN_DAY ; hour++)
-                System.out.println((this.clientContentPartRequests.get(day + "-" + hour) != null ? this.clientContentPartRequests.get(day + "-" + hour).size() : 0 ));
+        for (int day = 0; day < DAYS_TO_RUN; day++)
+            for (int hour = 0; hour < HOURS_IN_DAY; hour++)
+                System.out.println((this.clientContentPartRequests.get(day + "-" + hour) != null ? this.clientContentPartRequests.get(day + "-" + hour).size() : 0));
     }
 
     /**
@@ -173,7 +181,8 @@ public class Simulation {
     /**
      * Client requests 0 to n(random number) content parts of the content.
      * Adding this client request to the clientContentPartRequests map with key day-hour
-     * @param client client who starts request
+     *
+     * @param client  client who starts request
      * @param content content to be requested
      */
     private void createClientContentPartRequest(Client client, Content content) {
@@ -276,6 +285,7 @@ public class Simulation {
 
     /**
      * Generate a random number from 0 to 100, check if the number is less than the content's REQUEST_PERCENTAGE
+     *
      * @param content content may be requested
      * @return if the content should be requested
      */
@@ -299,15 +309,17 @@ public class Simulation {
 
     /**
      * Create NUMBER_OF_CONTENTS(default as 100) contents.
+     *
      * @throws Exception
      */
     private void createContents() throws Exception {
-        for (int i = 0 ; i < NUMBER_OF_CONTENTS ; i++)
+        for (int i = 0; i < NUMBER_OF_CONTENTS; i++)
             createContent(i);
     }
 
     /**
      * Create content with random popularity level and add it to contents list.
+     *
      * @param i Content index
      * @throws Exception
      */
@@ -321,18 +333,20 @@ public class Simulation {
 
     /**
      * Create content parts based on a content, the number of content parts is random from MIN to MAX.
+     *
      * @param content
      */
     private void createContentParts(Content content) {
         int numberOfParts = getRandomIntegerInRange(MIN_NUMBER_OF_CONTENT_PARTS_TO_REQUEST, MAX_NUMBER_OF_CONTENT_PARTS_TO_REQUEST);
-        for (int j = 0 ; j < numberOfParts ; j++)
+        for (int j = 0; j < numberOfParts; j++)
             createContentPart(content, j);
     }
 
     /**
      * Create a content part and add it to the content it belongs.
+     *
      * @param content
-     * @param j sequence number
+     * @param j       sequence number
      */
     private void createContentPart(Content content, int j) {
         ContentPart contentPart = new ContentPart(content, j);
@@ -346,6 +360,7 @@ public class Simulation {
      * 75% - REGULAR
      * 10% - POPUlAR
      * 5% - VERY_POPULAR
+     *
      * @return PopularityLevel generate randomly
      * @throws Exception
      */
@@ -371,6 +386,7 @@ public class Simulation {
 
     /**
      * Create a cacheNode in a certain region
+     *
      * @param region Region where create cacheNode
      */
     private void createCacheNode(Region region) {
@@ -380,7 +396,7 @@ public class Simulation {
     }
 
     private void createClients() {
-        for (int i = 0 ; i < NUMBER_OF_CLIENTS ; i++)
+        for (int i = 0; i < NUMBER_OF_CLIENTS; i++)
             createClient();
     }
 
