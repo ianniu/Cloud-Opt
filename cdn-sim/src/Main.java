@@ -1,6 +1,11 @@
-import org.jfree.ui.RefineryUtilities;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 
 
@@ -22,21 +27,40 @@ public class Main {
     private static int iter = 300;
     private static Map<Integer, Double> memo = new HashMap<>();
     // order first by cost, then CHR, used to get the lowest cost with acceptable CHR
-    private static Queue<AbstractMap.SimpleEntry<Integer, double[]>> pq = new PriorityQueue<>(
-            (p1, p2) -> {
-                double[] d1 = p1.getValue();
-                double[] d2 = p2.getValue();
-                if (d1[0] != d2[0]) {
-                    return d1[0] - d2[0] > 0 ? 1 : -1;
-                }
-                return d1[1] - d2[1] > 0 ? 1 : -1;
-            });
+    private static Queue<Pair<Integer, double[]>> pq = new PriorityQueue<>(
+        (p1, p2) -> {
+            double[] d1 = p1.getValue();
+            double[] d2 = p2.getValue();
+            if (d1[0] != d2[0]) {
+                return d1[0] - d2[0] > 0 ? 1 : -1;
+            }
+            return d1[1] - d2[1] > 0 ? 1 : -1;
+        });
+
+    static class Pair<K, V> {
+
+        K key;
+        V value;
+
+        public Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+    }
 
     public static void main(String[] args) throws Exception {
 //        bruteForce();
-        qLearning();
-//        double ttl = gradientDescent();
-//        System.out.println("result is " + (ttl > 0 ? ttl : "no qualified ttl"));
+//    qLearning();
+        double ttl = gradientDescent();
+        System.out.println("result is " + (ttl > 0 ? ttl : "no qualified ttl"));
     }
 
     private static void bruteForce() throws Exception {
@@ -97,7 +121,7 @@ public class Main {
                 explore(ttl, NUMBER_OF_DAYS_IN_WEEK, NUMBER_OF_DAYS_IN_WEEK);
 
                 explore(ttl, (int) Math.floor((ttl + MAX_TTL_IN_DAYS) / 2.0),
-                        (int) Math.floor((ttl + MIN_TTL_IN_DAYS) / 2.0));
+                    (int) Math.floor((ttl + MIN_TTL_IN_DAYS) / 2.0));
             }
         }
 
@@ -141,7 +165,8 @@ public class Main {
         ttlNCost.sort((a, b) -> (int) (a[0] - b[0]));
         ttlNCHR.sort((a, b) -> (int) (a[0] - b[0]));
         Chart costChart = new Chart(windowTitle, "TTL - Cost", "TTL/day", "Cost", ttlNCost);
-        Chart chrChart = new Chart(windowTitle, "TTL - Cache Hit Ratio", "TTL/day", "Cache Hit Ratio", ttlNCHR);
+        Chart chrChart = new Chart(windowTitle, "TTL - Cache Hit Ratio", "TTL/day", "Cache Hit Ratio",
+            ttlNCHR);
         costChart.plot();
         chrChart.plot();
     }
@@ -168,7 +193,7 @@ public class Main {
         double cost = d[0];
         double cacheHitRatio = d[1];
         memo.put(x, cost);
-        pq.add(new AbstractMap.SimpleEntry<>(x, new double[]{cost, cacheHitRatio}));
+        pq.add(new Pair(x, new double[]{cost, cacheHitRatio}));
         return cost;
     }
 
@@ -192,8 +217,8 @@ public class Main {
         int delta = 1;
         double precision = 0.0001;
         for (int i = 0;
-             i < iter && diff > precision && inRange(currentX + delta) && inRange(currentX - delta);
-             i++) {
+            i < iter && diff > precision && inRange(currentX + delta) && inRange(currentX - delta);
+            i++) {
 
             double derivative = derivative((int) Math.floor(currentX), delta);
             previousX = currentX;
@@ -209,7 +234,7 @@ public class Main {
         ArrayList<double[]> ttlNCHR = new ArrayList<>();
         double res = -1;
         while (!pq.isEmpty()) {
-            AbstractMap.SimpleEntry<Integer, double[]> pair = pq.poll();
+            Pair<Integer, double[]> pair = pq.poll();
             ttlNCost.add(new double[]{pair.getKey(), pair.getValue()[0]});
             ttlNCHR.add(new double[]{pair.getKey(), pair.getValue()[1]});
             if (pair.getValue()[1] >= MIN_ACCEPTABLE_CACHE_HIT_PERCENTAGE) {
@@ -218,7 +243,7 @@ public class Main {
             }
         }
         while (!pq.isEmpty()) {
-            AbstractMap.SimpleEntry<Integer, double[]> pair = pq.poll();
+            Pair<Integer, double[]> pair = pq.poll();
             ttlNCost.add(new double[]{pair.getKey(), pair.getValue()[0]});
             ttlNCHR.add(new double[]{pair.getKey(), pair.getValue()[1]});
         }
@@ -226,7 +251,8 @@ public class Main {
         ttlNCHR.sort((a, b) -> (int) (a[0] - b[0]));
         Chart costChart = new Chart("Gradient Descent", "TTL - Cost", "TTL/day", "Cost", ttlNCost);
         costChart.plot();
-        Chart chrChart = new Chart("Gradient Descent", "TTL - Cache Hit Ratio", "TTL/day", "Cache Hit Ratio", ttlNCHR);
+        Chart chrChart = new Chart("Gradient Descent", "TTL - Cache Hit Ratio", "TTL/day",
+            "Cache Hit Ratio", ttlNCHR);
         chrChart.plot();
         return res;
     }
