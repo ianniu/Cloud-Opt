@@ -57,10 +57,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-//        bruteForce();
+        bruteForce();
 //    qLearning();
-        double ttl = gradientDescent();
-        System.out.println("result is " + (ttl > 0 ? ttl : "no qualified ttl"));
+//        double ttl = gradientDescent();
+//        System.out.println("result is " + (ttl > 0 ? ttl : "no qualified ttl"));
     }
 
     private static void bruteForce() throws Exception {
