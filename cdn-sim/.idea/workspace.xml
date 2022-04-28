@@ -2,42 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5cc1b5f9-4c61-4511-b383-ce10df712a9d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/out/production/cdn-sim/Chart.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Chart.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../results/BF-TTLCHR.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../results/BF-TTLCost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../results/GD-TTLCHR.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../results/GD-TTLCost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../results/Q-TTLCHR.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../results/Q-TTLCost.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/Kpi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn-sim.iml" beforeDir="false" afterPath="$PROJECT_DIR$/cdn-sim.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/Simulation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/Simulation.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/CacheNode 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/CacheNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/CacheNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/CacheNodeCost.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/CacheNodeCost.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Client 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/ClientContentPartRequest 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/ClientContentPartRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/ClientContentPartRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Content 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Content.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/Content.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/ContentPart 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/ContentPart.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/ContentPart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/ContentPartRequests 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/ContentPartRequests.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/ContentPartRequests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Currency 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Currency.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/Currency.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/PopularityLevel 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/PopularityLevel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/PopularityLevel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Region 2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/cdn-sim/models/Region.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cdn-sim/models/Region.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Simulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Simulation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/CacheNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/CacheNode.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,12 +68,13 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="40189ae4-dfe4-4395-8eb8-13267cae6d44" name="Changes" comment="" />
+      <changelist id="5cc1b5f9-4c61-4511-b383-ce10df712a9d" name="Changes" comment="" />
       <created>1649697134715</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1649697134715</updated>
       <workItem from="1649697137118" duration="17043000" />
+      <workItem from="1651095814029" duration="876000" />
     </task>
     <servers />
   </component>

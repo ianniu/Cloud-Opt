@@ -64,6 +64,8 @@ public class Simulation {
   }
 
   private void setupSimulation() throws Exception {
+    totalNumberOfRequests = 0;
+    totalNumberOfRequestsThatHitCache = 0;
     createRegions();
     createClients();
     createCacheNodes();

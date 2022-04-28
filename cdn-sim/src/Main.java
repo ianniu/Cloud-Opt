@@ -1,3 +1,10 @@
+import models.Kpi;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +33,7 @@ public class Main {
   private static HashMap<Integer, Float> ttlCacheHitRatios = new HashMap<>();
   private static int iter = 300;
   private static Map<Integer, Double> memo = new HashMap<>();
+  private static String filepath = "kpi.txt";
   // order first by cost, then CHR, used to get the lowest cost with acceptable CHR
   private static Queue<Pair<Integer, double[]>> pq = new PriorityQueue<>(
       (p1, p2) -> {
@@ -57,10 +65,14 @@ public class Main {
   }
 
   public static void main(String[] args) throws Exception {
-    bruteForce();
+    long start = System.currentTimeMillis();
+//    bruteForce();
 //    qLearning();
-//        double ttl = gradientDescent();
-//        System.out.println("result is " + (ttl > 0 ? ttl : "no qualified ttl"));
+    double ttl = gradientDescent();
+    System.out.println("result is " + (ttl > 0 ? ttl : "no qualified ttl"));
+    long end = System.currentTimeMillis();
+    long time = end - start;
+    System.out.println("Time consumed: " + time);
   }
 
   private static void bruteForce() throws Exception {
@@ -77,6 +89,7 @@ public class Main {
     System.out.println("TTL Cache Hit Ratios: $" + ttlCacheHitRatios);
 
     plotChart("Brute Force");
+    writeKpi();
   }
 
   private static void qLearning() throws Exception {
@@ -95,7 +108,7 @@ public class Main {
       simulation.run();
 
       double reward;
-      double cost = simulation.getCost();
+      double cost = simulation.getCostPer100000Requests();
       ttlCosts.put(ttl, cost);
       ttlCacheHitRatios.put(ttl, simulation.getCacheHitRatio());
 
@@ -213,7 +226,7 @@ public class Main {
     double currentX = initialX;
     double previousX;
     // when we use totalCost as reference, adjust learningRate from 10 to 1(TBD).
-    double learningRate = 1;
+    double learningRate = 0.75;
     int delta = 1;
     double precision = 0.0001;
     for (int i = 0;
@@ -224,11 +237,11 @@ public class Main {
       previousX = currentX;
       currentX -= learningRate * derivative;
       diff = Math.abs(currentX - previousX);
-      System.out.println();
-      System.out.println("change: " + learningRate * derivative);
-      System.out.println("current x: " + currentX);
-      System.out.println("difference: " + diff);
-      System.out.println();
+//      System.out.println();
+//      System.out.println("change: " + learningRate * derivative);
+//      System.out.println("current x: " + currentX);
+//      System.out.println("difference: " + diff);
+//      System.out.println();
     }
     ArrayList<double[]> ttlNCost = new ArrayList<>();
     ArrayList<double[]> ttlNCHR = new ArrayList<>();
@@ -249,6 +262,10 @@ public class Main {
     }
     ttlNCost.sort((a, b) -> (int) (a[0] - b[0]));
     ttlNCHR.sort((a, b) -> (int) (a[0] - b[0]));
+    for (int i = 0; i < ttlNCost.size(); i++) {
+      ttlCosts.put((int) ttlNCost.get(i)[0], ttlNCost.get(i)[1]);
+      ttlCacheHitRatios.put((int) ttlNCHR.get(i)[0], (float) ttlNCHR.get(i)[1]);
+    }
     Chart costChart = new Chart("Gradient Descent", "TTL - Cost", "TTL/day", "Cost", ttlNCost);
     costChart.plot();
     Chart chrChart = new Chart("Gradient Descent", "TTL - Cache Hit Ratio", "TTL/day",
@@ -262,17 +279,39 @@ public class Main {
     Random rand = new Random();
     Set<Double> failedTry = new HashSet<>();
     for (int i = 0; i < iter; i++) {
-      double initialX = rand.nextInt(MAX_TTL_IN_DAYS) + MIN_TTL_IN_DAYS;
+//      double initialX = rand.nextInt(MAX_TTL_IN_DAYS) + MIN_TTL_IN_DAYS;
+      double initialX = 9;
       if (failedTry.contains(initialX)) {
         continue;
       }
       double tryOneTtl = findLocalMinimum(initialX);
       if (tryOneTtl != -1) {
+        writeKpi();
         return tryOneTtl;
       }
       failedTry.add(tryOneTtl);
     }
     return -1;
+  }
+
+  private static void writeKpi() {
+    ArrayList<Kpi> kpis = new ArrayList<>();
+    for (int i = 1; i < MAX_TTL_IN_DAYS; i++) {
+      if (ttlCosts.containsKey(i)) {
+        kpis.add(new Kpi(i, ttlCosts.get(i), ttlCacheHitRatios.get(i)));
+      }
+    }
+    try (BufferedWriter writer = Files
+            .newBufferedWriter(Paths.get(filepath), StandardCharsets.UTF_8)) {
+
+      for (Kpi kpi : kpis) {
+        writer.append(kpi.toString());
+        writer.newLine();
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
 }
