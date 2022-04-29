@@ -146,16 +146,20 @@ public class Main {
     plotChart("Q-Learning");
   }
 
+    private static void explore(int ttl, int stepSizeUp, int StepSizeDown) {
+        if (!usedTTLs.contains(ttl + stepSizeUp) && ttl + stepSizeUp <= MAX_TTL_IN_DAYS) {
+            ttlQueue.add(ttl + stepSizeUp);
+            usedTTLs.add(ttl + stepSizeUp);
+        }
 
-  private static void explore(int ttl, int stepSizeUp, int StepSizeDown) {
-    if (!usedTTLs.contains(ttl + stepSizeUp) && ttl + stepSizeUp <= MAX_TTL_IN_DAYS) {
-      ttlQueue.add(ttl + stepSizeUp);
-      usedTTLs.add(ttl + stepSizeUp);
+        if (!usedTTLs.contains(ttl - StepSizeDown) && ttl - StepSizeDown >= MIN_TTL_IN_DAYS) {
+            ttlQueue.add(ttl - StepSizeDown);
+            usedTTLs.add(ttl - StepSizeDown);
+        }
     }
 
-    if (!usedTTLs.contains(ttl - StepSizeDown) && ttl - StepSizeDown >= MIN_TTL_IN_DAYS) {
-      ttlQueue.add(ttl - StepSizeDown);
-      usedTTLs.add(ttl - StepSizeDown);
+    private static int getRandomIntegerInRange(int min, int max) {
+        return new Random().nextInt(max + 1 - min) + min;
     }
   }
 
@@ -291,8 +295,6 @@ public class Main {
       }
       failedTry.add(tryOneTtl);
     }
-    return -1;
-  }
 
   private static void writeKpi() {
     ArrayList<Kpi> kpis = new ArrayList<>();
