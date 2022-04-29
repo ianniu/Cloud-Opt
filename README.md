@@ -1,5 +1,7 @@
-# Cloud-Opt
-This is a group project of CS 5800.
+# CDN Opt
+This is a group project of CS 5800. 
+
+Content Delivery Networks - Gradient Descent Approach for Optimization of the Network Cost and the Cache Hit Ratio.
 
 
 
@@ -28,15 +30,13 @@ First solve the conflict (if there's any). Then add, commit, and push to the mas
 
 ## Abstract
 
-"This is the abstract of our project and the problem we solve."
+Based on the Q-Learning approach for optimization of the network cost and the cache hit ratio, we brought up a new machine learning based approach to find the best trade-off between network cost and cache hit ratio.
 
-Based on the Q-Learning approach for optimization of the network cost and the cache hit ratio, we want to bring up a new machine learning based approach to find the best trade-off between network cost and cache hit ratio.
+A brief introduction can be seen in this video: https://vimeo.com/704016222/4ec9a95672
 
 
 
 ## Background
-
-"Based on what scenario we want to do this project."
 
 To reduce response time, streaming services like Netflix tend to put more and more contents on CDN. However, with much use,  the CDN cost is relevant high. So it is necessary to adjust how long should one certain content be stored in CDN automatically based on the content demand.
 
@@ -44,57 +44,25 @@ To reduce response time, streaming services like Netflix tend to put more and mo
 
 ## Goal
 
-"Some goals we want to achieve."
+Based on the content delivery network model, the optimal TTL for some randomly generated contents should be found quickly.
 
-There are two possible solutions to find the best trade-off between network cost and CHR.
+The brute force approach to find the optimal TTL is the benchmark for balancing network cost and cache hit ratio, but the time of brute force is not practical for large amount of web contents.
 
-1. Based on the traffic model, we improve the TTL algorithm to achieve a higher CHR or reduce simulation time.
-2. By comparing traffic model and other similar models, find another suitable model and use it to implement our algorithm to improve CHR or reduce simulation time.
-
-But still there are several questions ahead of us:
-
-1. Is the brute force approach brought up in the paper a fully accurate algorithm? If so, we can use it as a benchmark. Based on what we've read, the brute force approach is used to calculate the optimal solution. And the algorithm is used to reduce simulation time.
-2. The initail value of TTL was randomly selected in the algorithm. Is there a better way to set a more precise value based on some predictions about the content? (Reduce some simulation time) 
-3. In simulation, depends on the reward value, some actions about adding / deducting TTL was performed. (Like adding 1 day / deducting 7 days) Is it effective to have some smaller change scope for TTL to achieve better simulation time?
-4. In the algorithm, it says "if reward > 0, then randomly choose the next action and repeat the reward calculation". Why choose randomly? How it promised the effect?
+So the approach produces accurate optimal TTL with much less execution time should be designed and implemented.
 
 
 
 ## Solution
 
-What we do to achieve.
+A content delivery network model is implemented. This model contains a main server, several regions, cache nodes, clients, contents to be requested, etc. A gradient descent algorithm is designed and used for finding the optimal TTL for 100 web contents with different popularities. The Cache Hit Ratio should be greater than 45% and the overall cost should be the lowest under the optimal TTL.
+
+We also set three different lifetime in our simulation: 12 weeks, 25 weeks, and 50 weeks, to test the effectiveness and efficiency of our algorithmssolidify our conclusion.
 
 
 
 ## Results
 
-### Brute Force
-
-![BF-TTLCost](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/BF-TTLCost.png)
-
-![BF-TTLCHR](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/BF-TTLCHR.png)
-
-### Q-Learning
+Results can be seen in our paper.
 
 
-
-![Q-TTLCost](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/Q-TTLCost.png)
-
-![Q-TTLCHR](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/Q-TTLCHR.png)
-
-### Gradient Descent
-
-![GD-TTLCost](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/GD-TTLCost.png)
-
-![GD-TTLCHR](/Users/niuyiheng/Documents/Align/CS5800/project/Cloud-Opt/results/GD-TTLCHR.png)
-
-## Open issue
-
-There are some aspects in our project that can be discussed further.
-
-
-
-## One more thing...
-
-We still can go further.
 

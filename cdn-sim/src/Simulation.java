@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
-
 public class Simulation {
 
   private static final int NUMBER_OF_CLIENTS = 3000;
@@ -64,6 +63,8 @@ public class Simulation {
   }
 
   private void setupSimulation() throws Exception {
+    totalNumberOfRequests = 0;
+    totalNumberOfRequestsThatHitCache = 0;
     createRegions();
     createClients();
     createCacheNodes();
